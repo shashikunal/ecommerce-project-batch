@@ -12,3 +12,7 @@ export const createCourse = async(payload)=>{
     let {data} = await api.post('/course/create-course',payload)
     return data;
 }
+export const fetchEnrollCourse = async(id)=>{
+    let {data} = await api.get(`/course/get-course-content/${id}`)
+    return data
+}
