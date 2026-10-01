@@ -19,11 +19,15 @@ import SingleUser from "./components/Admin/SingleUser";
 import CoursePage from "./components/courses/CoursePage";
 import AdminCoursePage from "./components/courses/AdminCoursePage"
 import CreateCourse from "./components/courses/CreateCourse";
+import Createorders from "./components/orders/Createorders";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   return (
     <Fragment>
       <Router>
+        <ToastContainer />
         <section id="navbar">
           <article className="container">
             <aside className="top_header">
@@ -40,6 +44,7 @@ const App = () => {
 
                 <Route element={<ProtectedRoutes />}>
                   <Route path="/courses" element={<CoursePage />} />
+                  <Route path="/courses/enroll/:courseId" element={<Createorders />}/>
                   <Route path="/user/profile" element={<ProfileDashboard />} >
                     <Route index element={<ProfileIndexPage />} />
                     <Route path="update-user-info" element={<UpdateProfileInfo />} />
@@ -51,6 +56,7 @@ const App = () => {
                   <Route path="/admin/courses" element={<AdminCoursePage />} />
                   <Route path="/admin/create-courses" element={ <CreateCourse /> } />
                   <Route path="admin/admin-dashboard" element={<AdminDashboard />}>
+
                     <Route index element={<GetAllUsers />} />
                     <Route path="user/:id" element={<SingleUser />} />
                   </Route>

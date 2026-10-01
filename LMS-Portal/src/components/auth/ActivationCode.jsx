@@ -21,21 +21,47 @@ const ActivationCode = () => {
     setState({ ...state, [name]: value });
   };
 
-  let handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (successRes) {
-        await ActivationUser({
-          activation_token: activationToken,
-          activation_code: activationCode,
-        });
-        toast.success("user has been successfully activated account");
-        navigate("/auth/login");
-      }
-    } catch (error) {
-      toast.error("activation link has been expired or unavailable ...", error);
-    }
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!activationToken || !activationCode.trim()) {
+    toast.error("Please enter a valid activation code.");
+    return;
+  }
+
+  try {
+    setState((prev) => ({
+      ...prev,
+      isLoading: true,
+    }));
+
+    const response = await ActivationUser({
+      activation_token: activationToken,
+      activation_code: activationCode.trim(),
+    });
+
+    toast.success(
+      response?.message || "User account activated successfully!"
+    );
+
+    localStorage.removeItem("activationToken");
+    localStorage.removeItem("successRes");
+
+    navigate("/auth/login");
+  } catch (error) {
+    console.error("Activation error:", error);
+
+    toast.error(
+      error.response?.data?.message ||
+      "Activation link has expired or is unavailable."
+    );
+  } finally {
+    setState((prev) => ({
+      ...prev,
+      isLoading: false,
+    }));
+  }
+};
 
   return (
     <section id={Styles.auth}>
